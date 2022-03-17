@@ -1,4 +1,4 @@
-# MobDev
+# MobDev Rick and Morty Application
 MobDev technical test
 
 Esta es la prueba técnica de MobDev.
