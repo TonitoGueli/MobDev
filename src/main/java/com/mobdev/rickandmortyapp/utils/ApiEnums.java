@@ -1,5 +1,9 @@
 package com.mobdev.rickandmortyapp.utils;
 
+/**
+ * @author: Anthonny Gueli
+ * ENUMS to make easier to access Json Values.
+ * */
 public enum ApiEnums {
 
     GET_A_SINGLE_CHARACTER("https://rickandmortyapi.com/api/character/{id}"),

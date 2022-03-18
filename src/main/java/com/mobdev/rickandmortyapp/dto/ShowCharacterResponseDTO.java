@@ -1,12 +1,12 @@
 package com.mobdev.rickandmortyapp.dto;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 
 import javax.persistence.*;
 
 /**
+ * @author: Anthonny Gueli
  * This class getter's and setter's methods are implemented by Lombok through the @Data annotation.
  * If you wish to see each of the methods created by Lombok, just follow the next steps:
  * right click on Character > Refactor > DLombok > "All Lombok Annotations.
@@ -46,7 +46,4 @@ public class ShowCharacterResponseDTO {
     @Column(name = "character_origin")
     private String origin;
 
-    public ShowCharacterResponseDTO() {
-
-    }
 }

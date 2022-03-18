@@ -9,11 +9,22 @@ import java.nio.charset.StandardCharsets;
 
 import static com.mobdev.rickandmortyapp.utils.ApiEnums.*;
 
+/**
+* @author: Anthonny Gueli
+* Calls to external APis
+* */
 public class RestClient {
 
     private String getLocationFromCharacter = "";
 
-    public ShowCharacterResponseDTO getShowCharacter (String id){
+    /**
+     * Makes a call to characterApi
+     * Needs an int id as input.
+     * Based on the APi response, it saves the Character's Location URL.
+     * This method sends the Location URL to the method getLocationFromCharacter.
+     * Returns a ShowCharacterResponseDTO object.
+     * */
+    public ShowCharacterResponseDTO getShowCharacter (Integer id){
         RestTemplate restTemplate = new RestTemplate();
         JsonNode jsonNode = restTemplate.getForObject(
                 GET_A_SINGLE_CHARACTER.toString(), JsonNode.class,id);
@@ -30,12 +41,18 @@ public class RestClient {
                 .origin(jsonNode.get(String.valueOf(ORIGIN)).toString())
                 .build();
 
-        getLocationFromCharacter = jsonNode.get(String.valueOf(LOCATION)).textValue();
+        getLocationFromCharacter = jsonNode.get(String.valueOf(LOCATION))
+                .get(String.valueOf(URL)).textValue();
 
         return characterResponseDTO;
     }
 
-    public LocationResponseDTO getLocationFromCharacter (String locationFromCharacterEndpoint){
+    /**
+     * This method receives the Character's Location URL from the getShowCharacter method as input.
+     * Makes a call to the Location API.
+     * Returns a LocationResponseDTO object.
+     * */
+    public LocationResponseDTO getLocationFromCharacter (){
         RestTemplate restTemplate = new RestTemplate();
         JsonNode jsonNode = restTemplate.getForObject(
                 getLocationFromCharacter,JsonNode.class);

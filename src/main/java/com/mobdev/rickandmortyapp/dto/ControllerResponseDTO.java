@@ -3,6 +3,10 @@ package com.mobdev.rickandmortyapp.dto;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+* @author: Anthonny Gueli
+* Response DTO Class
+* */
 public class ControllerResponseDTO implements Serializable {
 
     public int id;

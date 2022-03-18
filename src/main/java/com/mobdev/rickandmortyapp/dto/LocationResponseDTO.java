@@ -6,6 +6,7 @@ import lombok.Getter;
 import javax.persistence.*;
 
 /**
+ * @author: Anthonny Gueli
  * This class getter's and setter's methods are implemented by Lombok through the @Data annotation.
  * If you wish to see each of the methods created by Lombok, just follow the next steps:
  * right click on Location > Refactor > DLombok > "All Lombok Annotations.
@@ -39,7 +40,4 @@ public class LocationResponseDTO {
     @Column(name = "location_residents")
     private String residents;
 
-    public LocationResponseDTO() {
-
-    }
 }

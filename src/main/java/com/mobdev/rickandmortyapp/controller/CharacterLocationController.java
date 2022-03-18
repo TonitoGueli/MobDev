@@ -7,6 +7,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+import static com.mobdev.rickandmortyapp.utils.ApiEnums.ID;
+
+/**
+* @author: Anthonny Gueli
+* Internal APi Controller
+* */
 @RestController
 @RequestMapping(path = "api/")
 public class CharacterLocationController {
@@ -27,7 +33,7 @@ public class CharacterLocationController {
     * */
     @PostMapping(path = "mobdev/characterLocation/")
     public ControllerResponseDTO getShowCharacter(@RequestBody Map<String, Integer> id) {
-        return showCharacterService.generateFinalResponse(id.toString());
+        return showCharacterService.generateFinalResponse(id.get(String.valueOf(ID)));
     }
 
 }
