@@ -7,6 +7,7 @@ import com.mobdev.rickandmortyapp.dto.LocationResponseDTO;
 import com.mobdev.rickandmortyapp.dto.ShowCharacterResponseDTO;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static com.mobdev.rickandmortyapp.utils.ApiEnums.*;
@@ -49,8 +50,9 @@ public class RestClient {
                         .replaceAll("'","")).toString())
                 .build();
 
-        getLocationFromCharacter = jsonNode.get(String.valueOf(LOCATION))
+        getLocationFromCharacter = jsonNode.get(String.valueOf(ORIGIN))
                 .get(String.valueOf(URL).replaceAll("'","")).textValue();
+
 
         return characterResponseDTO;
     }
@@ -62,21 +64,27 @@ public class RestClient {
      * */
     public LocationResponseDTO getLocationFromCharacter (){
         RestTemplate restTemplate = new RestTemplate();
-        JsonNode jsonNode = restTemplate.getForObject(
-                getLocationFromCharacter,JsonNode.class);
 
-        LocationResponseDTO locationResponseDTO = LocationResponseDTO
-                .builder()
-                .id(Integer.parseInt(jsonNode.get(String.valueOf(ID)).toString()))
-                .name(jsonNode.get(String.valueOf(NAME)
-                        .replaceAll("'","")).textValue())
-                .url(jsonNode.get(String.valueOf(URL)
-                        .replaceAll("'","")).textValue())
-                .dimension(jsonNode.get(String.valueOf(DIMENSION)
-                        .replaceAll("'","")).textValue())
-                .residents(jsonNode.get(String.valueOf(RESIDENTS)).toString()
-                        .replaceAll("'",""))
-                .build();
+        JsonNode jsonNode;
+        LocationResponseDTO locationResponseDTO = null;
+        try{
+            jsonNode = restTemplate.getForObject(
+                    getLocationFromCharacter,JsonNode.class);
+            locationResponseDTO = LocationResponseDTO
+                    .builder()
+                    .id(Integer.parseInt(jsonNode.get(String.valueOf(ID)).toString()))
+                    .name(jsonNode.get(String.valueOf(NAME)
+                            .replaceAll("'","")).textValue())
+                    .url(jsonNode.get(String.valueOf(URL)
+                            .replaceAll("'","")).textValue())
+                    .dimension(jsonNode.get(String.valueOf(DIMENSION)
+                            .replaceAll("'","")).textValue())
+                    .residents(jsonNode.get(String.valueOf(RESIDENTS)).toString()
+                            .replaceAll("'",""))
+                    .build();
+        }catch (Exception e){
+            locationResponseDTO = LocationResponseDTO.builder().build();
+        }
 
         return locationResponseDTO;
     }

@@ -59,15 +59,20 @@ public class CharacterLocationService {
          * Decoded bytes[]
          * Decoded Base64
          * */
-        String residentsFromLocationData = locationData.getResidents();
-        byte[] decodedBytesResidentsFromLocationData = Base64.getDecoder().decode(residentsFromLocationData);
-        String decodedResidentsFromLocationData = new String(decodedBytesResidentsFromLocationData);
-        decodedResidentsFromLocationData.replace("'","");
         ArrayList<String> arrayResidents = new ArrayList<>();
-        List<String> existingData = new ArrayList<>(Arrays.asList(decodedResidentsFromLocationData.split(",")));
-        for (int i = 0; i < existingData.size(); i++) {
-            arrayResidents.add(existingData.get(i).replaceAll("\"|(^\\[|\\]$)", ""));
+        try{
+            String residentsFromLocationData = locationData.getResidents();
+            byte[] decodedBytesResidentsFromLocationData = Base64.getDecoder().decode(residentsFromLocationData);
+            String decodedResidentsFromLocationData = new String(decodedBytesResidentsFromLocationData);
+            decodedResidentsFromLocationData.replace("'","");
+            List<String> existingData = new ArrayList<>(Arrays.asList(decodedResidentsFromLocationData.split(",")));
+            for (int i = 0; i < existingData.size(); i++) {
+                arrayResidents.add(existingData.get(i).replaceAll("\"|(^\\[|\\]$)", ""));
+            }
+        }catch (Exception e){
+
         }
+
 
         /**
          * Origin string split and value sanitization
@@ -126,10 +131,16 @@ public class CharacterLocationService {
         /**
          * Base64 encryption.
          * */
-        String residentsString = locationResponseDTO.getResidents();
-        String residentsEncrypted = Base64.getEncoder().
-                encodeToString(residentsString.getBytes(StandardCharsets.UTF_8));
-        locationResponseDTO.setResidents(residentsEncrypted);
+
+        try{
+            String residentsString = locationResponseDTO.getResidents();
+            String residentsEncrypted = Base64.getEncoder().
+                    encodeToString(residentsString.getBytes(StandardCharsets.UTF_8));
+            locationResponseDTO.setResidents(residentsEncrypted);
+        }catch (Exception e){
+
+        }
+
 
         locationRepository.save(locationResponseDTO);
     }
