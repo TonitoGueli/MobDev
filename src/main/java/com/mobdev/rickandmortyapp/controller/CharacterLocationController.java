@@ -1,11 +1,13 @@
 package com.mobdev.rickandmortyapp.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.mobdev.rickandmortyapp.dto.CharacterLocationRequestDTO;
 import com.mobdev.rickandmortyapp.dto.ControllerResponseDTO;
-import com.mobdev.rickandmortyapp.service.ShowCharacterService;
+import com.mobdev.rickandmortyapp.service.CharacterLocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.io.IOException;
 
 import static com.mobdev.rickandmortyapp.utils.ApiEnums.ID;
 
@@ -18,7 +20,7 @@ import static com.mobdev.rickandmortyapp.utils.ApiEnums.ID;
 public class CharacterLocationController {
 
     @Autowired
-    ShowCharacterService showCharacterService;
+    CharacterLocationService characterLocationService;
 
     /*
     * Home page.
@@ -32,8 +34,10 @@ public class CharacterLocationController {
     * POST method to generate final response
     * */
     @PostMapping(path = "mobdev/characterLocation/")
-    public ControllerResponseDTO getShowCharacter(@RequestBody Map<String, Integer> id) {
-        return showCharacterService.generateFinalResponse(id.get(String.valueOf(ID)));
+    public ControllerResponseDTO getShowCharacter(
+            @RequestBody CharacterLocationRequestDTO characterLocationRequestDTO) throws IOException {
+        return characterLocationService.generateFinalResponse(
+                characterLocationRequestDTO.getRequestMap().get(String.valueOf(ID)));
     }
 
 }

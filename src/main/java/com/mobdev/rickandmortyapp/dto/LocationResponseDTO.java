@@ -1,6 +1,7 @@
 package com.mobdev.rickandmortyapp.dto;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "locations")
-@Getter
+@Data
 @Builder
 public class LocationResponseDTO {
 
@@ -33,11 +34,7 @@ public class LocationResponseDTO {
     @Column(name = "location_dimension")
     private String dimension;
 
-    @Column(name = "location_residents_blob")
-    @Lob
-    private byte[] residentsAsBlob;
-
     @Column(name = "location_residents")
+    @Lob
     private String residents;
-
 }

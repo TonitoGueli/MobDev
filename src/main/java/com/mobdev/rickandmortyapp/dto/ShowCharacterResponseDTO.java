@@ -1,9 +1,12 @@
 package com.mobdev.rickandmortyapp.dto;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * @author: Anthonny Gueli
@@ -15,7 +18,7 @@ import javax.persistence.*;
 @Table(name = "characters")
 @Getter
 @Builder
-public class ShowCharacterResponseDTO {
+public class ShowCharacterResponseDTO implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,10 +41,6 @@ public class ShowCharacterResponseDTO {
 
     @Column(name = "character_episode_count")
     private int episode_count;
-
-    @Column(name = "character_origin_blob")
-    @Lob
-    private byte[] originAsBlob;
 
     @Column(name = "character_origin")
     private String origin;
