@@ -1,6 +1,7 @@
-package com.mobdev.rickandmortyapp.models;
+package com.mobdev.rickandmortyapp.dto;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 
 import javax.persistence.*;
 
@@ -10,9 +11,10 @@ import javax.persistence.*;
  * right click on Location > Refactor > DLombok > "All Lombok Annotations.
  */
 @Entity
-@Table(name = "Locations")
-@Data
-public class Location {
+@Table(name = "locations")
+@Getter
+@Builder
+public class LocationResponseDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,8 +32,14 @@ public class Location {
     @Column(name = "location_dimension")
     private String dimension;
 
-    @Column(name = "location_residents")
+    @Column(name = "location_residents_blob")
     @Lob
-    private byte[] residents;
+    private byte[] residentsAsBlob;
 
+    @Column(name = "location_residents")
+    private String residents;
+
+    public LocationResponseDTO() {
+
+    }
 }

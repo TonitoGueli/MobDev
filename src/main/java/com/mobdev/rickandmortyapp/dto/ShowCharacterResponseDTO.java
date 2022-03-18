@@ -1,9 +1,10 @@
-package com.mobdev.rickandmortyapp.models;
+package com.mobdev.rickandmortyapp.dto;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 import javax.persistence.*;
-import java.util.Map;
 
 /**
  * This class getter's and setter's methods are implemented by Lombok through the @Data annotation.
@@ -12,8 +13,9 @@ import java.util.Map;
 */
 @Entity
 @Table(name = "characters")
-@Data
-public class ShowCharacter {
+@Getter
+@Builder
+public class ShowCharacterResponseDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,9 +41,12 @@ public class ShowCharacter {
 
     @Column(name = "character_origin_blob")
     @Lob
-    private byte[] originasblob;
+    private byte[] originAsBlob;
 
     @Column(name = "character_origin")
     private String origin;
 
+    public ShowCharacterResponseDTO() {
+
+    }
 }
