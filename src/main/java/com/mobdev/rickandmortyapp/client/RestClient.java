@@ -46,7 +46,7 @@ public class RestClient {
                 .episode_count(jsonNode.get(String.valueOf(EPISODE))
                         .size())
                 .origin(jsonNode.get(String.valueOf(ORIGIN)
-                        .replaceAll("'","")).textValue())
+                        .replaceAll("'","")).toString())
                 .build();
 
         getLocationFromCharacter = jsonNode.get(String.valueOf(LOCATION))
@@ -76,7 +76,6 @@ public class RestClient {
                         .replaceAll("'","")).textValue())
                 .residents(jsonNode.get(String.valueOf(RESIDENTS)).toString()
                         .replaceAll("'",""))
-                //jsonNode.get(String.valueOf(RESIDENTS)).toString().replaceAll("'","")
                 .build();
 
         return locationResponseDTO;

@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
+
+import static com.mobdev.rickandmortyapp.utils.ApiEnums.NAME;
+import static com.mobdev.rickandmortyapp.utils.ApiEnums.URL;
 
 /**
 * @author: Anthonny Gueli
@@ -55,7 +55,7 @@ public class CharacterLocationService {
         saveLocationTransaction(locationData);
 
         /**
-         * LocationList string split by comma regex value
+         * LocationList string split and value sanitization
          * Decoded bytes[]
          * Decoded Base64
          * */
@@ -69,7 +69,18 @@ public class CharacterLocationService {
             arrayResidents.add(existingData.get(i).replaceAll("\"|(^\\[|\\]$)", ""));
         }
 
-
+        /**
+         * Origin string split and value sanitization
+         * Also morphed the String to HashMap for simplicity when making the final response in the builder method.
+         * */
+        HashMap<String, String> originMap = new HashMap<>();
+        String[] characterDataOrigin = characterData.getOrigin().split(",");
+        for (String s:characterDataOrigin
+        ) {
+            String[] section = s.split(":",2);
+            originMap.put(section[0].replaceAll("\"|\\{|\\}", "")
+                    ,section[1].replaceAll("\"|\\{|\\}", ""));
+        }
 
         /**
          * Origin node building for final response
@@ -77,8 +88,8 @@ public class CharacterLocationService {
          * */
         ControllerResponseDTO.Origin originObject = ControllerResponseDTO.Origin
                 .builder()
-                .name(characterData.getOrigin())
-                .url(locationData.getUrl())
+                .name(originMap.get(String.valueOf(NAME)))
+                .url(originMap.get(String.valueOf(URL)))
                 .dimension(locationData.getDimension())
                 .residents(arrayResidents)
                 .build();
