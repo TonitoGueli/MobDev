@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 /**
  * @author: Anthonny Gueli
  * Interface to JPA Repository
- * */
+ */
 @Repository
-public interface LocationRepository extends JpaRepository<LocationResponseDTO,Long> {
+public interface LocationRepository extends JpaRepository<LocationResponseDTO, Long> {
 
 }

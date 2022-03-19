@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 /**
  * @author: Anthonny Gueli
  * Interface to JPARepository methods.
- * */
+ */
 @Repository
-public interface ShowCharacterRepository extends JpaRepository<ShowCharacterResponseDTO,Long> {
+public interface ShowCharacterRepository extends JpaRepository<ShowCharacterResponseDTO, Long> {
 
 }

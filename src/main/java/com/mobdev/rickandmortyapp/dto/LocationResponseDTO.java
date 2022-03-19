@@ -2,7 +2,6 @@ package com.mobdev.rickandmortyapp.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 
 import javax.persistence.*;
 

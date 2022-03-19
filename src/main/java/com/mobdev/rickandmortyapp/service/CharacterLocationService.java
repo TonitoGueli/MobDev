@@ -1,8 +1,5 @@
 package com.mobdev.rickandmortyapp.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mobdev.rickandmortyapp.client.RestClient;
 import com.mobdev.rickandmortyapp.dto.ControllerResponseDTO;
 import com.mobdev.rickandmortyapp.dto.LocationResponseDTO;
@@ -20,9 +17,9 @@ import static com.mobdev.rickandmortyapp.utils.ApiEnums.NAME;
 import static com.mobdev.rickandmortyapp.utils.ApiEnums.URL;
 
 /**
-* @author: Anthonny Gueli
-* Service layer which contains business logic.
-* */
+ * @author: Anthonny Gueli
+ * Service layer which contains business logic.
+ */
 @Service
 public class CharacterLocationService {
 
@@ -36,11 +33,12 @@ public class CharacterLocationService {
         this.locationRepository = locationRepository;
     }
 
+
     /**
      * This method persist both responses coming from both APis and also builds the final response
      * based on the ControllerResponseDTO class.
-     * */
-    public ControllerResponseDTO generateFinalResponse (Integer id) throws IOException {
+     */
+    public ControllerResponseDTO generateFinalResponse(Integer id) throws IOException {
 
         /**
          * Character object persistence
@@ -60,16 +58,16 @@ public class CharacterLocationService {
          * Decoded Base64
          * */
         ArrayList<String> arrayResidents = new ArrayList<>();
-        try{
+        try {
             String residentsFromLocationData = locationData.getResidents();
             byte[] decodedBytesResidentsFromLocationData = Base64.getDecoder().decode(residentsFromLocationData);
             String decodedResidentsFromLocationData = new String(decodedBytesResidentsFromLocationData);
-            decodedResidentsFromLocationData.replace("'","");
+            decodedResidentsFromLocationData.replace("'", "");
             List<String> existingData = new ArrayList<>(Arrays.asList(decodedResidentsFromLocationData.split(",")));
             for (int i = 0; i < existingData.size(); i++) {
                 arrayResidents.add(existingData.get(i).replaceAll("\"|(^\\[|\\]$)", ""));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -80,11 +78,11 @@ public class CharacterLocationService {
          * */
         HashMap<String, String> originMap = new HashMap<>();
         String[] characterDataOrigin = characterData.getOrigin().split(",");
-        for (String s:characterDataOrigin
+        for (String s : characterDataOrigin
         ) {
-            String[] section = s.split(":",2);
+            String[] section = s.split(":", 2);
             originMap.put(section[0].replaceAll("\"|\\{|\\}", "")
-                    ,section[1].replaceAll("\"|\\{|\\}", ""));
+                    , section[1].replaceAll("\"|\\{|\\}", ""));
         }
 
         /**
@@ -102,7 +100,7 @@ public class CharacterLocationService {
         /**
          * Final response building.
          * We inject the Origin object here.
-        * */
+         * */
         ControllerResponseDTO finalResponseObject = ControllerResponseDTO
                 .builder()
                 .id(characterData.getId())
@@ -119,25 +117,25 @@ public class CharacterLocationService {
 
     /**
      * Method to persist in the Characters table.
-     * */
-    public void saveCharacterTransaction(ShowCharacterResponseDTO showCharacter){
+     */
+    public void saveCharacterTransaction(ShowCharacterResponseDTO showCharacter) {
         showCharacterRepository.save(showCharacter);
     }
 
     /**
      * Method to persist in the Location table.
-     * */
-    public void saveLocationTransaction(LocationResponseDTO locationResponseDTO){
+     */
+    public void saveLocationTransaction(LocationResponseDTO locationResponseDTO) {
         /**
          * Base64 encryption.
          * */
 
-        try{
+        try {
             String residentsString = locationResponseDTO.getResidents();
             String residentsEncrypted = Base64.getEncoder().
                     encodeToString(residentsString.getBytes(StandardCharsets.UTF_8));
             locationResponseDTO.setResidents(residentsEncrypted);
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 

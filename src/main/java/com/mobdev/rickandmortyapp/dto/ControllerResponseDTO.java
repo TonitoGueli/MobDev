@@ -2,21 +2,16 @@ package com.mobdev.rickandmortyapp.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
-import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
-* @author: Anthonny Gueli
-* Response DTO Class
-* */
+ * @author: Anthonny Gueli
+ * Response DTO Class
+ */
 @Data
 @Builder
-public class ControllerResponseDTO implements Serializable{
+public class ControllerResponseDTO {
 
     public int id;
     public String name;
@@ -28,7 +23,7 @@ public class ControllerResponseDTO implements Serializable{
 
     @Data
     @Builder
-    public static class Origin{
+    public static class Origin {
         public String name;
         public String url;
         public String dimension;

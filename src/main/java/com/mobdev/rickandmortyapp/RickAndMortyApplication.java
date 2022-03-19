@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * @author: Anthonny Gueli
  * Main Method
- * */
+ */
 @SpringBootApplication
 public class RickAndMortyApplication {
 
