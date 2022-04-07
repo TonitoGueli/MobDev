@@ -22,7 +22,7 @@ import static com.mobdev.rickandmortyapp.utils.ApiEnums.ID;
 public class CharacterLocationController {
 
     @Autowired
-    CharacterLocationService characterLocationService;
+    private CharacterLocationService characterLocationService;
 
     /**
      * Home page just for the memes.
@@ -37,7 +37,7 @@ public class CharacterLocationController {
      */
     @PostMapping(path = "mobdev/characterLocation/")
     public ControllerResponseDTO getShowCharacter(
-            @RequestBody CharacterLocationRequestDTO characterLocationRequestDTO) throws IOException {
+            @RequestBody CharacterLocationRequestDTO characterLocationRequestDTO) {
 
         return characterLocationService.generateFinalResponse(
                 characterLocationRequestDTO.getRequestMap().get(String.valueOf(ID)));

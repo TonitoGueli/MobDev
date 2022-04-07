@@ -1,7 +1,9 @@
 package com.mobdev.rickandmortyapp.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,6 +17,8 @@ import java.io.Serializable;
 @Entity
 @Table(name = "characters")
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class ShowCharacterResponseDTO implements Serializable {
 

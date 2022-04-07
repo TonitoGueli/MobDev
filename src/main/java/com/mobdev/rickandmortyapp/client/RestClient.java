@@ -1,9 +1,10 @@
 package com.mobdev.rickandmortyapp.client;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.mobdev.rickandmortyapp.model.CharactersApiResponse;
 import com.mobdev.rickandmortyapp.dto.LocationResponseDTO;
 import com.mobdev.rickandmortyapp.dto.ShowCharacterResponseDTO;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import static com.mobdev.rickandmortyapp.utils.ApiEnums.*;
@@ -17,15 +18,16 @@ public class RestClient {
     private String getLocationFromCharacter = "";
 
     /**
+     * Gets API Response as JSON.
      * Makes a call to characterApi
      * Needs an int id as input.
      * Based on the APi response, it saves the Character's Location URL.
      * This method sends the Location URL to the method getLocationFromCharacter.
      * Returns a ShowCharacterResponseDTO object.
      */
-    public ShowCharacterResponseDTO getShowCharacter(Integer id) throws JsonProcessingException {
+    public ShowCharacterResponseDTO getShowCharacterAsJson(Integer id)  {
         RestTemplate restTemplate = new RestTemplate();
-        JsonNode jsonNode = restTemplate.getForObject(
+        JsonNode jsonNode = restTemplate.getForObject( // getForEntity
                 GET_A_SINGLE_CHARACTER.toString(), JsonNode.class, id);
 
         ShowCharacterResponseDTO characterResponseDTO = ShowCharacterResponseDTO
@@ -54,6 +56,22 @@ public class RestClient {
     }
 
     /**
+     * Gets API Response as an Entity.
+     * Makes a call to characterApi
+     * Needs an int id as input.
+     * Based on the APi response, it saves the Character's Location URL.
+     * This method sends the Location URL to the method getLocationFromCharacter.
+     * Returns a ShowCharacterResponseDTO object.
+     */
+    public ResponseEntity<CharactersApiResponse> getShowCharacterAsEntity(Integer id)  {
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<CharactersApiResponse> showCharacter = restTemplate.getForEntity(
+                GET_A_SINGLE_CHARACTER.toString(), CharactersApiResponse.class, id);
+
+        return showCharacter;
+    }
+
+    /**
      * This method receives the Character's Location URL from the getShowCharacter method as input.
      * Makes a call to the Location API.
      * Returns a LocationResponseDTO object.
@@ -62,7 +80,7 @@ public class RestClient {
         RestTemplate restTemplate = new RestTemplate();
 
         JsonNode jsonNode;
-        LocationResponseDTO locationResponseDTO = null;
+        LocationResponseDTO locationResponseDTO;
         try {
             jsonNode = restTemplate.getForObject(
                     getLocationFromCharacter, JsonNode.class);

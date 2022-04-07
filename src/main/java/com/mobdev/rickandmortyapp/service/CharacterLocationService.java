@@ -1,15 +1,17 @@
 package com.mobdev.rickandmortyapp.service;
 
 import com.mobdev.rickandmortyapp.client.RestClient;
+import com.mobdev.rickandmortyapp.model.CharactersApiResponse;
 import com.mobdev.rickandmortyapp.dto.ControllerResponseDTO;
 import com.mobdev.rickandmortyapp.dto.LocationResponseDTO;
 import com.mobdev.rickandmortyapp.dto.ShowCharacterResponseDTO;
 import com.mobdev.rickandmortyapp.repository.LocationRepository;
 import com.mobdev.rickandmortyapp.repository.ShowCharacterRepository;
+import com.mobdev.rickandmortyapp.utils.ArrayListSanitization;
+import com.mobdev.rickandmortyapp.utils.HashMapSanitization;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -26,6 +28,8 @@ public class CharacterLocationService {
     private final ShowCharacterRepository showCharacterRepository;
     private final LocationRepository locationRepository;
     private final RestClient restClient = new RestClient();
+    private ArrayListSanitization arrayListSanitization = new ArrayListSanitization();
+    private HashMapSanitization hashMapSanitization = new HashMapSanitization();
 
     @Autowired
     public CharacterLocationService(ShowCharacterRepository showCharacterRepository, LocationRepository locationRepository) {
@@ -38,13 +42,20 @@ public class CharacterLocationService {
      * This method persist both responses coming from both APis and also builds the final response
      * based on the ControllerResponseDTO class.
      */
-    public ControllerResponseDTO generateFinalResponse(Integer id) throws IOException {
+    public ControllerResponseDTO generateFinalResponse(Integer id) {
 
         /**
          * Character object persistence
          * */
-        ShowCharacterResponseDTO characterData = restClient.getShowCharacter(id);
+        ShowCharacterResponseDTO characterData = restClient.getShowCharacterAsJson(id);
         saveCharacterTransaction(characterData);
+
+        /**
+         *
+         * Getting a ResponseEntity instead of a Json.
+         * This doesn't require persistence since the class "CharactersApiResponse" is not a DB entity.
+         * */
+        ResponseEntity<CharactersApiResponse> characterDataAsEntity = restClient.getShowCharacterAsEntity(id);
 
         /**
          * Location object persistence
@@ -52,38 +63,12 @@ public class CharacterLocationService {
         LocationResponseDTO locationData = restClient.getLocationFromCharacter();
         saveLocationTransaction(locationData);
 
-        /**
-         * LocationList string split and value sanitization
-         * Decoded bytes[]
-         * Decoded Base64
-         * */
-        ArrayList<String> arrayResidents = new ArrayList<>();
-        try {
-            String residentsFromLocationData = locationData.getResidents();
-            byte[] decodedBytesResidentsFromLocationData = Base64.getDecoder().decode(residentsFromLocationData);
-            String decodedResidentsFromLocationData = new String(decodedBytesResidentsFromLocationData);
-            decodedResidentsFromLocationData.replace("'", "");
-            List<String> existingData = new ArrayList<>(Arrays.asList(decodedResidentsFromLocationData.split(",")));
-            for (int i = 0; i < existingData.size(); i++) {
-                arrayResidents.add(existingData.get(i).replaceAll("\"|(^\\[|\\]$)", ""));
-            }
-        } catch (Exception e) {
 
-        }
+        ArrayList<String> arrayResidents =
+                new ArrayList<>(arrayListSanitization.sanitizeValues(locationData.getResidents()));
 
-
-        /**
-         * Origin string split and value sanitization
-         * Also morphed the String to HashMap for simplicity when making the final response in the builder method.
-         * */
-        HashMap<String, String> originMap = new HashMap<>();
-        String[] characterDataOrigin = characterData.getOrigin().split(",");
-        for (String s : characterDataOrigin
-        ) {
-            String[] section = s.split(":", 2);
-            originMap.put(section[0].replaceAll("\"|\\{|\\}", "")
-                    , section[1].replaceAll("\"|\\{|\\}", ""));
-        }
+        HashMap<String, String> originMap =
+                new HashMap<>(hashMapSanitization.sanitizeHashMap(characterData.getOrigin().split(",")));
 
         /**
          * Origin node building for final response
@@ -129,7 +114,6 @@ public class CharacterLocationService {
         /**
          * Base64 encryption.
          * */
-
         try {
             String residentsString = locationResponseDTO.getResidents();
             String residentsEncrypted = Base64.getEncoder().
