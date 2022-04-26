@@ -18,4 +18,5 @@ public class CharactersApiResponse {
     private String type;
     private int episode_count;
     private Object origin;
+    private String lastName;
 }
