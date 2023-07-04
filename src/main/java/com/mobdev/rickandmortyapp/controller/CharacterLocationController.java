@@ -4,10 +4,7 @@ import com.mobdev.rickandmortyapp.dto.CharacterLocationRequestDTO;
 import com.mobdev.rickandmortyapp.dto.ControllerResponseDTO;
 import com.mobdev.rickandmortyapp.service.CharacterLocationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -27,7 +24,7 @@ public class CharacterLocationController {
     /**
      * Home page just for the memes.
      */
-    @RequestMapping
+    @GetMapping("hello")
     public String ShowCharactersWelcome() {
         return "Bienvenido a la API de la API de personajes de Rick and Morty";
     }
